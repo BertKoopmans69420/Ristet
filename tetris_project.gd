@@ -13,6 +13,7 @@ var current_y = SPAWN_Y
 var fall_timer = 0.0
 var fall_speed = 1.0
 var score = 0
+var lines_cleared = 0
 var offset_x = 0
 var offset_y = 0
 
@@ -124,6 +125,7 @@ func clear_lines():
 		grid.insert(0, ["", "", "", "", "", "", "", "", "", ""])
 	
 	if lines_to_clear.size() > 0:
+		lines_cleared += lines_to_clear.size()
 		score += lines_to_clear.size() * 100
 
 func _input(event):
@@ -255,8 +257,21 @@ func draw_current_piece():
 				draw_rect(Rect2(x, y, CELL_SIZE, CELL_SIZE), Color.WHITE, false, 1.0)
 
 func draw_scoreboard():
-	var scoreboard_x = offset_x + GRID_WIDTH * CELL_SIZE + 40
+	var scoreboard_x = offset_x + GRID_WIDTH * CELL_SIZE + 30
 	var scoreboard_y = offset_y + 20
+	var box_width = 140
+	var box_height = 180
 	
-	draw_string(ThemeDB.fallback_font, Vector2(scoreboard_x, scoreboard_y), "SCORE", 0, -1, 16, Color.WHITE)
-	draw_string(ThemeDB.fallback_font, Vector2(scoreboard_x, scoreboard_y + 40), str(score), 0, -1, 16, Color.YELLOW)
+	# Draw background box
+	draw_rect(Rect2(scoreboard_x - 10, scoreboard_y - 10, box_width, box_height), Color(0.2, 0.2, 0.2, 0.8))
+	draw_rect(Rect2(scoreboard_x - 10, scoreboard_y - 10, box_width, box_height), Color.WHITE, false, 2.0)
+	
+	# Draw title
+	draw_string(ThemeDB.fallback_font, Vector2(scoreboard_x, scoreboard_y), "SCORE", 0, -1, 18, Color.YELLOW)
+	
+	# Draw score value
+	draw_string(ThemeDB.fallback_font, Vector2(scoreboard_x, scoreboard_y + 35), str(score), 0, -1, 20, Color.WHITE)
+	
+	# Draw lines cleared
+	draw_string(ThemeDB.fallback_font, Vector2(scoreboard_x, scoreboard_y + 75), "LINES", 0, -1, 16, Color.CYAN)
+	draw_string(ThemeDB.fallback_font, Vector2(scoreboard_x, scoreboard_y + 100), str(lines_cleared), 0, -1, 18, Color.WHITE)
